@@ -37,37 +37,24 @@ def createAccessToken(data: dict, expiresDelta: timedelta):
 async def login_for_accessToken(formData: OAuth2PasswordRequestForm = Depends()):
     user =  collectionUserData.find_one({"username": formData.username})
     if not user or not pwd_context.verify(formData.password, user["password"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    accessTokenExpires = timedelta(minutes=3)
+        return {"login":False}
+    accessTokenExpires = timedelta(minutes=2)
     accessToken = createAccessToken(
         data={"subject": user["username"]}, expiresDelta=accessTokenExpires
     )
-    return {"accessToken": accessToken, "tokenType": "bearer","message":"Registration successful."}
+    return {"accessToken": accessToken, "tokenType": "Bearer","login":True}
 
-# สร้าง route สำหรับเทสการป้องกันสำหรับ route ที่ต้องการ authentication
-# @apiLogin.get("/users/me")
-# async def read_users_me(token: str = Depends(oauth2_scheme)):
-#     payload = jwt.decode(token, os.environ["SECRETS_KEY"], algorithms=["HS256"])
-#     username: str = payload.get("subject")
-#     if username not in fake_users_db:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return {"username": username}
-
-# @apiLogin.get("/users/me")
-# async def read_users_me(token: str = Depends(oauth2_scheme)):
-#     try:
-#         payload = jwt.decode(token, os.environ["SECRETS_KEY"], algorithms=["HS256"])
-#         username: str = payload.get("subject")
-#         user = collectionUserData.find_one({"username": username})
-#         if not user:
-#             raise HTTPException(status_code=404, detail="User not found")
-#         return {"username": username}
-#     except jwt.ExpiredSignatureError:
-#         raise HTTPException(status_code=401, detail="Token has expired")
-#     except jwt.JWTError:
-#         raise HTTPException(status_code=401, detail="Invalid token")
+@apiLogin.get("/users/data")
+async def checkAccessToken (token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, os.environ["SECRETS_KEY"], algorithms=["HS256"])
+        username: str = payload.get("subject")
+        user = collectionUserData.find_one({"username": username})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {"username": username}
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 

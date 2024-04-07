@@ -34,7 +34,7 @@ const LoginRegister = (props) => {
                 />
                 <input
                   type="text"
-                  className="form-control mb-15p "
+                  className="form-control mb-15p text-dark"
                   id="inputPassword"
                   placeholder="Password"
                   onChange={(event) => sendPassword(event.target.value)}

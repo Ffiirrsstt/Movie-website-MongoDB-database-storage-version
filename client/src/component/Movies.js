@@ -6,20 +6,6 @@ import "../css/MoviesCategory.css";
 
 const Movies = () => {
   const numPromote = useRef(0); //useRef เก็บค่าไม่ให้หายหลังจากการ render
-  // const urlData = [
-  //   {
-  //     index: 0,
-  //     urlImg:
-  //       "https://th.bing.com/th/id/R.c17cd7651d43b1005384132c24cc1aa4?rik=n%2bOa1SmmXMtX0A&pid=ImgRaw&r=0",
-  //     titleImg: "แมว",
-  //   },
-  //   {
-  //     index: 1,
-  //     urlImg:
-  //       "https://th.bing.com/th/id/OIP.5FTenxt-3il9nwxzvDIYzgHaE7?rs=1&pid=ImgDetMain",
-  //     titleImg: "หมา",
-  //   },
-  // ];
 
   const urlData = useMemo(
     () => [
@@ -31,6 +17,18 @@ const Movies = () => {
       },
       {
         index: 1,
+        urlImg:
+          "https://th.bing.com/th/id/OIP.5FTenxt-3il9nwxzvDIYzgHaE7?rs=1&pid=ImgDetMain",
+        titleImg: "หมา",
+      },
+      {
+        index: 3,
+        urlImg:
+          "https://th.bing.com/th/id/R.c17cd7651d43b1005384132c24cc1aa4?rik=n%2bOa1SmmXMtX0A&pid=ImgRaw&r=0",
+        titleImg: "แมว",
+      },
+      {
+        index: 4,
         urlImg:
           "https://th.bing.com/th/id/OIP.5FTenxt-3il9nwxzvDIYzgHaE7?rs=1&pid=ImgDetMain",
         titleImg: "หมา",
@@ -76,7 +74,8 @@ const Movies = () => {
         {imgPromote && (
           <img
             src={imgPromote.urlImg}
-            className="img-fluid w-100 h-100 rounded fade-promote"
+            className="img-fluid w-100 h-100 rounded"
+            // className="img-fluid w-100 h-100 rounded fade-promote"
             alt={imgPromote.titleImg}
           />
         )}
@@ -90,7 +89,10 @@ const Movies = () => {
                     ? "btn btn-light border-0 mr-1 color-faded"
                     : "border-0 rounded-circle btn-promote mr-1 color-faded"
                 }
-                onClick={() => funImgPromote(dataImg, index)}
+                onClick={() => {
+                  funImgPromote(dataImg, index);
+                  numPromote.current = index;
+                }}
               ></button>
             );
           })}

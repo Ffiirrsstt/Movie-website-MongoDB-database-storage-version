@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
@@ -6,6 +7,7 @@ import LoginRegister from "./LoginRegister";
 const Login = () => {
   const [userData, sendUserData] = useState("");
   const [passwordData, setPasswordData] = useState("");
+  const navigate = useNavigate();
 
   const sendData = async () => {
     try {
@@ -13,16 +15,24 @@ const Login = () => {
       formData.append("username", userData);
       formData.append("password", passwordData);
 
-      await axios.post(`${process.env.REACT_APP_API}login`, formData);
-      swal("Operation successful.", "", "success");
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}login`,
+        formData
+      );
+      if (response.data.login) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("tokenType", response.data.tokenType);
+        swal("Operation successful.", "Login successful.", "success");
+        navigate("/");
+      } else swal("Login failed.", "The password is incorrect.", "error");
     } catch (error) {
       swal("Error Found", error, "error");
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    await sendData();
+    sendData();
   };
 
   const receiveUserData = (data) => sendUserData(data);
