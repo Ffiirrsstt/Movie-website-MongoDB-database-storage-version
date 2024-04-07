@@ -1,0 +1,89 @@
+.movies-main {
+  position: relative;
+  top: 8vh;
+}
+
+.promote {
+  margin-top: 2vh;
+  height: 75vh;
+  width: 70vw;
+}
+
+.relative {
+  position: relative;
+}
+
+.promote-button {
+  position: absolute;
+  bottom: 1vh;
+  left: 1vw;
+  z-index: 100;
+}
+
+.btn-promote {
+  width: 13px;
+  height: 13px;
+}
+
+.category {
+  padding-bottom: 1vh;
+  border-bottom: 2px solid #bf0000;
+}
+
+.cover-channel {
+  height: 40vh;
+  width: 15%;
+}
+
+.relative {
+  position: relative;
+}
+
+.promote-button {
+  position: absolute;
+  bottom: 1vh;
+  left: 1vw;
+  z-index: 100;
+}
+
+.next-data {
+  position: absolute;
+  bottom: 17vh;
+  right: 0.2vw;
+  z-index: 100;
+}
+
+.prev-data {
+  position: absolute;
+  bottom: 17vh;
+  left: 0.2vw;
+  z-index: 100;
+}
+
+.cover {
+  filter: brightness(0.9);
+  transition: var(--trans);
+}
+.cover:hover {
+  filter: brightness(1.2);
+}
+
+.opacity-0-6 {
+  opacity: 0.6;
+}
+
+.fade-promote {
+  animation: fade-promote 3s ease-in-out infinite;
+}
+
+@keyframes fade-promote {
+  0% {
+    opacity: 0.2;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}

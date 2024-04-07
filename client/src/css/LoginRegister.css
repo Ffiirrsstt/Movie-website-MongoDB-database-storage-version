@@ -1,0 +1,22 @@
+.login-box {
+  width: 30vw;
+  height: 65vh;
+  border: var(--border-color);
+  box-shadow: var(--shadow-box);
+  position: absolute;
+  z-index: 1000 !important;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fade-login {
+  animation: fade-login 5s ease-in-out;
+}
+
+@keyframes fade-login {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
