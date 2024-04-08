@@ -1,10 +1,29 @@
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
-
-const TestLogin = false;
+import { useContext, useEffect, useState } from "react";
+import MyContext from "../Context/MyContext";
 
 const Nav = () => {
+  const { readData, clearToken } = useContext(MyContext);
+  const [uiLogin, setUiLogin] = useState();
+
+  useEffect(() => {
+    readLogin();
+  }, []);
+
+  const readLogin = async () => {
+    const resultLogin = await readData(false);
+    setUiLogin(resultLogin[0]);
+  };
+
+  const logout = () => {
+    const currentUrl = window.location.pathname;
+
+    clearToken();
+    if (currentUrl === `/`) window.location.reload();
+  };
+
   return (
     <nav className="nav bg-dark justify-content-center fixed-top">
       <ul className="nav nav-tabs row w-100 border-bottom-1">
@@ -27,7 +46,7 @@ const Nav = () => {
             <IoSearchOutline />
           </button>
         </li>
-        {TestLogin ? (
+        {uiLogin ? (
           <li className="nav-item dropdown d-flex justify-content-end col-1">
             <Link
               to="/Love"
@@ -48,8 +67,8 @@ const Nav = () => {
                 Another action
               </Link>
               <div className="dropdown-divider"></div>
-              <Link to="#" className="dropdown-item">
-                Action
+              <Link to="/" onClick={logout} className="dropdown-item">
+                Logout
               </Link>
             </div>
           </li>

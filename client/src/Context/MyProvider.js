@@ -56,7 +56,9 @@ const MyProvider = ({ children }) => {
   };
 
   return (
-    <MyContext.Provider value={{ readData }}>{children}</MyContext.Provider>
+    <MyContext.Provider value={{ readData, clearToken }}>
+      {children}
+    </MyContext.Provider>
   );
 };
 

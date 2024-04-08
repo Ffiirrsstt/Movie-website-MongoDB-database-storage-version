@@ -7,7 +7,7 @@ import axios from "axios";
 import "../css/MoviesCategory.css";
 
 const Category = (props) => {
-  const { text, dataMovies, typeData } = props;
+  const { text, dataMovies, typeData, classPB } = props;
 
   const [pageData, setPageData] = useState([
     [0, false],
@@ -60,7 +60,7 @@ const Category = (props) => {
   }, [dataShow]);
 
   return (
-    <div className="pt-5 test">
+    <div className={`pt-5 test ${classPB}`}>
       <h1 className="fs-2 category">{text}</h1>
       <div className="d-flex justify-content-between">
         {dataShow !== undefined &&

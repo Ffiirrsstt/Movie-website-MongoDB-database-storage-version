@@ -139,21 +139,25 @@ const Movies = () => {
                 recommendations ? recommendations : dataMovies.Popular
               }
               type={"Popular"}
+              classPB={""}
             />
             <Category
               text={"Movies"}
               dataMovies={dataMovies.Movies}
               typeData={"Movies"}
+              classPB={""}
             />
             <Category
               text={"Animation"}
               dataMovies={dataMovies.Anime}
               typeData={"Animation"}
+              classPB={""}
             />
             <Category
               text={"Live Action"}
               dataMovies={dataMovies.liveAction}
               typeData={"Live-Action"}
+              classPB={"pb-5"}
             />
           </>
         )}
