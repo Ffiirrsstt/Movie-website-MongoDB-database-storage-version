@@ -67,9 +67,9 @@ def nextLiveAction(dataSkip):
     return json_util.dumps( liveAction)
 
 @apiMovies.get('/Movies/detail')
-def detail(index):
+def detail(index:str,username:str):
     dataDetail = collectionMovieData.find_one({"index": int(index)})
-
-    collectionUserData.update_one({"idUser": "0"}, {"$set": {"viewIndex": int(index)}})
+    user = collectionUserData.find_one({"username": username})
+    collectionUserData.update_one({"idUser": user.get("idUser")}, {"$set": {"viewTitle": dataDetail.get("title")}})
 
     return json_util.dumps(dataDetail)

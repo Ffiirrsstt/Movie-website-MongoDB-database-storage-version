@@ -30,7 +30,7 @@ def sentiment(text, decode=False):
     return rounded
 
 def suggested(movie_name):
-    titile = []
+    dataSuggested = []
     list_of_all_titles = movies_data['title'].tolist()
     find_close_match = difflib.get_close_matches(movie_name, list_of_all_titles)
     close_match = find_close_match[0]
@@ -42,9 +42,13 @@ def suggested(movie_name):
     for movie in sorted_similar_movies:
         index = movie[0]
         title_from_index = movies_data[movies_data.index==index]['title'].values[0]
-        if (i<30):
-            titile.append(f'{i} . {title_from_index}')
+        image_from_index = movies_data[movies_data.index==index]['image'].values[0]
+        if (i<=6):
+            dataSuggested.append({
+                "index":index,
+                "title":title_from_index,
+                "image":image_from_index})
             i+=1
     
-    return titile
+    return dataSuggested
 

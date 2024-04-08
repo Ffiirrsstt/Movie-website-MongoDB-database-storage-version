@@ -33,7 +33,7 @@ const LoginRegister = (props) => {
                   onChange={(event) => sendUserData(event.target.value)}
                 />
                 <input
-                  type="text"
+                  type="password"
                   className="form-control mb-15p text-dark"
                   id="inputPassword"
                   placeholder="Password"

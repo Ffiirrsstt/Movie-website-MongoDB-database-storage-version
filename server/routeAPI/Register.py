@@ -38,7 +38,7 @@ async def register(dataAccount:account):
     hashedPassword = pwContext.hash(dataAccount.passwordData)
 
     accountId = collectionUserData.count_documents({})
-    dataInsert  = {"idUser":accountId,"username" : dataAccount.userData,"password":hashedPassword,"viewIndex": ""}
+    dataInsert  = {"idUser":accountId,"username" : dataAccount.userData,"password":hashedPassword,"viewTitle": ""}
     collectionUserData.insert_one(dataInsert)
     return {"message": "Registration successful."}
 
