@@ -27,7 +27,7 @@ const Category = (props) => {
     case "Live-Action":
       dataLen = 4;
       break;
-    // ต้องการให้แสดงรายการที่ยอดนิยม 6 อันดับแรก
+    // ต้องการให้แสดงรายการที่ยอดนิยม 6 อันดับแรก หรือ แสดงรายการแนะนำ
     case "Popular":
       dataLen = 6;
       break;

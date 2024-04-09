@@ -5,9 +5,10 @@ import { useContext, useEffect, useState } from "react";
 import MyContext from "../Context/MyContext";
 
 const Nav = () => {
-  const { readData, clearToken } = useContext(MyContext);
+  const { readData, clearToken, searchData } = useContext(MyContext);
   const [uiLogin, setUiLogin] = useState();
   const [user, setUser] = useState();
+  const [dataSearch, setDataSearch] = useState("");
 
   useEffect(() => {
     readLogin();
@@ -37,6 +38,8 @@ const Nav = () => {
         <li className="nav-item d-flex justify-content-end align-items-center col-9">
           <input
             className="nav-item input h-50 border-0 rounded focus-outline-none w-50 mr-2 p-3 text-end"
+            onChange={(event) => setDataSearch(event.target.value)}
+            value={dataSearch}
             placeholder="ค้นหาหนังที่ต้องการได้ที่นี่"
           />
           <button
@@ -44,6 +47,10 @@ const Nav = () => {
             name=""
             id=""
             className="btn btn-secondary rounded-circle "
+            onClick={() => {
+              searchData(dataSearch);
+              setDataSearch("");
+            }}
           >
             <IoSearchOutline />
           </button>

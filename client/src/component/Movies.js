@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useContext } from "react";
+import SearchMovies from "./SearchMovies";
 import axios from "axios";
 import Category from "./Category";
 import Comment from "./Comment";
@@ -8,7 +9,7 @@ import MyContext from "../Context/MyContext";
 import "../css/MoviesCategory.css";
 
 const Movies = () => {
-  const { readData, readComment } = useContext(MyContext);
+  const { readData, readComment, dataMoviesSearch } = useContext(MyContext);
   const numPromote = useRef(0); //useRef เก็บค่าไม่ให้หายหลังจากการ render
 
   const urlData = useMemo(
@@ -49,6 +50,7 @@ const Movies = () => {
   const [numBtn, setNumBtn] = useState([]);
   const [typeComment, setTypeComment] = useState("All");
   const [numPage, setNumPage] = useState(1);
+  const [test, setTest] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,6 +77,10 @@ const Movies = () => {
   useEffect(() => {
     runComment(1);
   }, [typeComment]);
+
+  useEffect(() => {
+    setTest(dataMoviesSearch[1]);
+  }, [dataMoviesSearch]);
 
   const runComment = async (page) => {
     await displayComment(page);
@@ -169,44 +175,51 @@ const Movies = () => {
           })}
         </div>
       </div>
-      <div className="text-white w-70">
-        {dataMovies !== undefined && (
+      <div className="d-flex flex-column align-items-center text-white vw-70">
+        {!dataMoviesSearch[0] && (
           <>
-            {recommendations && (
-              <Category
-                text={"Recommendations for you"}
-                dataMovies={recommendations}
-                type={"Popular"}
-                classPB={""}
-              />
+            {dataMovies !== undefined && (
+              <>
+                {recommendations && (
+                  <Category
+                    text={"Recommendations for you"}
+                    dataMovies={recommendations}
+                    type={"Popular"}
+                    classPB={""}
+                  />
+                )}
+                {!recommendations && (
+                  <Category
+                    text={"Recommendations for you"}
+                    dataMovies={dataMovies.Popular}
+                    type={"Popular"}
+                    classPB={""}
+                  />
+                )}
+                <Category
+                  text={"Movies"}
+                  dataMovies={dataMovies.Movies}
+                  typeData={"Movies"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Animation"}
+                  dataMovies={dataMovies.Anime}
+                  typeData={"Animation"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Live Action"}
+                  dataMovies={dataMovies.liveAction}
+                  typeData={"Live-Action"}
+                  classPB={"pb-5"}
+                />
+              </>
             )}
-            {!recommendations && (
-              <Category
-                text={"Recommendations for you"}
-                dataMovies={dataMovies.Popular}
-                type={"Popular"}
-                classPB={""}
-              />
-            )}
-            <Category
-              text={"Movies"}
-              dataMovies={dataMovies.Movies}
-              typeData={"Movies"}
-              classPB={""}
-            />
-            <Category
-              text={"Animation"}
-              dataMovies={dataMovies.Anime}
-              typeData={"Animation"}
-              classPB={""}
-            />
-            <Category
-              text={"Live Action"}
-              dataMovies={dataMovies.liveAction}
-              typeData={"Live-Action"}
-              classPB={"pb-5"}
-            />
           </>
+        )}
+        {dataMoviesSearch[0] && (
+          <SearchMovies dataMoives={Object.values(dataMoviesSearch[1])} />
         )}
         <Comment sendAllComment={(data) => setComment(data)} />
         <AllComment comment={comment} sendTypeComment={receivedTypeComment} />

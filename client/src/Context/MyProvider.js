@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import MyContext from "./MyContext";
 import axios from "axios";
 import swal from "sweetalert";
 
 const MyProvider = ({ children }) => {
+  const [dataMoviesSearch, setDataMoviesSearch] = useState([false, ""]);
+
   const messageLogin = () => {
     return new Promise((resolve, reject) => {
       swal({
@@ -55,16 +57,16 @@ const MyProvider = ({ children }) => {
     }
   };
 
-  const searchData = async () => {
+  const searchData = async (dataSearch) => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API}movies/search`,
         {
-          params: { dataSearch: "avatar" },
+          params: { dataSearch: dataSearch },
         }
       );
-      console.log(response.data);
-      return [true, response.data];
+      // console.log(JSON.parse(response.data));
+      setDataMoviesSearch([true, JSON.parse(response.data)]);
     } catch {}
   };
 
@@ -92,7 +94,16 @@ const MyProvider = ({ children }) => {
   const fillData = (datalength, data) => Array(datalength.length).fill(data);
 
   return (
-    <MyContext.Provider value={{ readData, clearToken, readComment, fillData }}>
+    <MyContext.Provider
+      value={{
+        readData,
+        clearToken,
+        readComment,
+        fillData,
+        searchData,
+        dataMoviesSearch,
+      }}
+    >
       {children}
     </MyContext.Provider>
   );

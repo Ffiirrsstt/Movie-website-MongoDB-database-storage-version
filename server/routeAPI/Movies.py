@@ -66,10 +66,22 @@ def nextLiveAction(dataSkip):
     liveAction = list(collectionMovieData.find({"formats": "Live Action"}).skip(int(dataSkip)).limit(6))
     return json_util.dumps( liveAction)
 
-@apiMovies.get('/Movies/detail')
+@apiMovies.get('/movies/detail')
 def detail(index:str,username:str):
     dataDetail = collectionMovieData.find_one({"index": int(index)})
     user = collectionUserData.find_one({"username": username})
     collectionUserData.update_one({"idUser": user.get("idUser")}, {"$set": {"viewTitle": dataDetail.get("title")}})
 
     return json_util.dumps(dataDetail)
+
+@apiMovies.get('/movies/search')
+def searchData(dataSearch:str):
+    resultSearch = collectionMovieData.find({
+    "$or": [
+        {"title": {"$regex": dataSearch, "$options": "i"}},
+        {"genres": {"$regex": dataSearch, "$options": "i"}},
+        {"formats": {"$regex": dataSearch, "$options": "i"}},
+        {"keywords": {"$regex": dataSearch, "$options": "i"}}
+    ]
+})
+    return json_util.dumps(resultSearch)

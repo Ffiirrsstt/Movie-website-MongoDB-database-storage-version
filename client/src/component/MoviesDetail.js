@@ -23,7 +23,7 @@ const MoviesDetail = () => {
     if (!resultData[0]) return navigate(resultData[1]);
 
     axios
-      .get(`${process.env.REACT_APP_API}Movies/detail`, {
+      .get(`${process.env.REACT_APP_API}movies/detail`, {
         params: {
           index: idMovies,
           username: resultData[1].username,

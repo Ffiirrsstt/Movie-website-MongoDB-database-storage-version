@@ -61,7 +61,7 @@ const Comment = ({ sendAllComment }) => {
     );
 
   return (
-    <div className="comment-main d-flex flex-column align-items-center rounded mb-5">
+    <div className="comment-main w-100 d-flex flex-column align-items-center rounded mt-5">
       <div className="h-20 d-flex align-items-center w-100">
         <h3 className="fs-3 text-center text-shadow text-white">
           expressing opinions
