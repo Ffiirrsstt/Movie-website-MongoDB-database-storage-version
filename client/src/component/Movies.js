@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef, useMemo, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import Category from "./Category";
 import axios from "axios";
-
-import "../css/MoviesCategory.css";
+import Category from "./Category";
+import Comment from "./Comment";
+import AllComment from "./AllComment";
 import MyContext from "../Context/MyContext";
 
+import "../css/MoviesCategory.css";
+
 const Movies = () => {
-  const { readData } = useContext(MyContext);
+  const { readData, readComment } = useContext(MyContext);
   const numPromote = useRef(0); //useRef เก็บค่าไม่ให้หายหลังจากการ render
 
   const urlData = useMemo(
@@ -44,8 +45,10 @@ const Movies = () => {
   const [selectImgPromote, setSelectImgPromote] = useState(0);
   const [dataMovies, setDataMovies] = useState();
   const [recommendations, setRecommendations] = useState();
-
-  const navigate = useNavigate();
+  const [comment, setComment] = useState();
+  const [numBtn, setNumBtn] = useState([]);
+  const [typeComment, setTypeComment] = useState("All");
+  const [numPage, setNumPage] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,8 +61,39 @@ const Movies = () => {
   }, [urlData]);
 
   useEffect(() => {
-    readDataMovie();
+    readAllData();
   }, []);
+
+  useEffect(() => {
+    generateNumBtn();
+  }, [comment]);
+
+  useEffect(() => {
+    runComment();
+  }, [numPage]);
+
+  useEffect(() => {
+    runComment(1);
+  }, [typeComment]);
+
+  const runComment = async (page) => {
+    await displayComment(page);
+    generateNumBtn();
+  };
+
+  const displayComment = async (page = numPage) => {
+    let data;
+    if (typeComment === "All") data = "{}";
+    else if (typeComment === "Positive") data = '{ "sentiment": "positive" }';
+    else if (typeComment === "Negative") data = '{ "sentiment": "negative" }';
+    const dataComment = await readComment(page, data);
+    setComment(dataComment);
+  };
+
+  const readAllData = async () => {
+    readDataMovie();
+    displayComment();
+  };
 
   const readDataSuggested = async () => {
     try {
@@ -75,30 +109,36 @@ const Movies = () => {
         }
       );
       setRecommendations(response.data.suggested);
-      // setRecommendations(JSON.parse(response.data));
+      return resultData[1].username;
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
   };
 
-  const readDataMovie = () => {
-    readDataSuggested();
-    axios
-      .get(`${process.env.REACT_APP_API}`)
-      .then((response) => {
-        if (response.data) {
-          setDataMovies(JSON.parse(response.data));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
+  const readDataMovie = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API}`);
+
+      setDataMovies(JSON.parse(response.data));
+      await readDataSuggested();
+    } catch {}
   };
 
   const funImgPromote = (dataImg, index) => {
     setImgPromote(dataImg);
     setSelectImgPromote(index);
   };
+
+  const generateNumBtn = () => {
+    let result = [];
+    if (comment) {
+      const cmCount = JSON.parse(comment).count;
+      for (let num = 1; num <= cmCount / 20 + 1; num++) result.push(num);
+      setNumBtn(result);
+    }
+  };
+
+  const receivedTypeComment = async (data) => setTypeComment(data);
 
   return (
     <div className="text-dark movies-main w-100 d-flex flex-column  align-items-center bg-dark">
@@ -107,7 +147,6 @@ const Movies = () => {
           <img
             src={imgPromote.urlImg}
             className="img-fluid w-100 h-100 rounded"
-            // className="img-fluid w-100 h-100 rounded fade-promote"
             alt={imgPromote.titleImg}
           />
         )}
@@ -133,14 +172,22 @@ const Movies = () => {
       <div className="text-white w-70">
         {dataMovies !== undefined && (
           <>
-            <Category
-              text={"Recommendations for you"}
-              dataMovies={
-                recommendations ? recommendations : dataMovies.Popular
-              }
-              type={"Popular"}
-              classPB={""}
-            />
+            {recommendations && (
+              <Category
+                text={"Recommendations for you"}
+                dataMovies={recommendations}
+                type={"Popular"}
+                classPB={""}
+              />
+            )}
+            {!recommendations && (
+              <Category
+                text={"Recommendations for you"}
+                dataMovies={dataMovies.Popular}
+                type={"Popular"}
+                classPB={""}
+              />
+            )}
             <Category
               text={"Movies"}
               dataMovies={dataMovies.Movies}
@@ -161,6 +208,22 @@ const Movies = () => {
             />
           </>
         )}
+        <Comment sendAllComment={(data) => setComment(data)} />
+        <AllComment comment={comment} sendTypeComment={receivedTypeComment} />
+        <div className="w-100 text-end">
+          {!(numBtn.length === 1) &&
+            numBtn.map((data, index) => (
+              <button
+                key={index}
+                className={`rounded text-end mb-5 ${
+                  index === numBtn.length - 1 ? "" : "mr-1"
+                }  `}
+                onClick={() => setNumPage(data)}
+              >
+                {data}
+              </button>
+            ))}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import MyContext from "./MyContext";
 import axios from "axios";
 import swal from "sweetalert";
@@ -55,8 +55,44 @@ const MyProvider = ({ children }) => {
     }
   };
 
+  const searchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}movies/search`,
+        {
+          params: { dataSearch: "avatar" },
+        }
+      );
+      console.log(response.data);
+      return [true, response.data];
+    } catch {}
+  };
+
+  const readComment = async (page, search) => {
+    try {
+      let username = await readData(false);
+      username = !username[0] ? "" : username[1].username;
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}show/Comment`,
+        {
+          params: {
+            username: username,
+            pageComment: page,
+            findData: search,
+          },
+        }
+      );
+      return response.data;
+    } catch {
+      console.log("Error");
+    }
+  };
+
+  const fillData = (datalength, data) => Array(datalength.length).fill(data);
+
   return (
-    <MyContext.Provider value={{ readData, clearToken }}>
+    <MyContext.Provider value={{ readData, clearToken, readComment, fillData }}>
       {children}
     </MyContext.Provider>
   );

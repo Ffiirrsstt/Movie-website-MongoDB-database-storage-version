@@ -82,7 +82,7 @@ const Category = (props) => {
               </Link>
               {pageData[0][1] && indexMovie === 0 && (
                 <GrPrevious
-                  className="fs-1 prev-data icon-faded"
+                  className="fs-1 prev-data icon-faded cursor-pointer"
                   onClick={() => {
                     setPageData([
                       [
@@ -99,7 +99,7 @@ const Category = (props) => {
                 detailMovie.length !== 0 &&
                 dataLen > 6 && (
                   <GrNext
-                    className="fs-1 next-data icon-faded"
+                    className="fs-1 next-data icon-faded cursor-pointer"
                     onClick={() =>
                       setPageData([
                         [pageData[0][0] + 6, true],

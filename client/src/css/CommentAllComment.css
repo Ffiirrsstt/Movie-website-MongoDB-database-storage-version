@@ -1,0 +1,20 @@
+.comment-main {
+  border: 1px solid var(--main-color);
+  height: 30vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
+
+.comment-box {
+  box-shadow: var(--shadow-box-comment);
+  margin-bottom: 3vh;
+  height: 15vh;
+}
+
+.filter-brightness:hover {
+  filter: brightness(1.2);
+}
+
+#editData {
+  width: 100% !important;
+}
