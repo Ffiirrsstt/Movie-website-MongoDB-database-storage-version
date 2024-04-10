@@ -11,19 +11,21 @@ const Login = () => {
 
   const sendData = async () => {
     try {
-      const formData = new FormData();
-      formData.append("username", userData);
-      formData.append("password", passwordData);
+      if (userData && userData !== "" && passwordData && passwordData !== "") {
+        const formData = new FormData();
+        formData.append("username", userData);
+        formData.append("password", passwordData);
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}login`,
-        formData
-      );
-      if (response.data.login) {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("tokenType", response.data.tokenType);
-        swal("Operation successful.", "Login successful.", "success");
-        navigate("/");
+        const response = await axios.post(
+          `${process.env.REACT_APP_API}login`,
+          formData
+        );
+        if (response.data.login) {
+          localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("tokenType", response.data.tokenType);
+          swal("Operation successful.", "Login successful.", "success");
+          navigate("/");
+        } else swal("Login failed.", "The password is incorrect.", "error");
       } else swal("Login failed.", "The password is incorrect.", "error");
     } catch (error) {
       swal("Error Found", error, "error");

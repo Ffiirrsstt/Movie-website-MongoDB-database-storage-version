@@ -50,9 +50,7 @@ const MyProvider = ({ children }) => {
       );
       return [true, response.data];
     } catch (error) {
-      if (error.response.status === 401) {
-        clearToken();
-      }
+      clearToken();
       return useMessage ? await messageLogin() : [false, ""];
     }
   };
@@ -65,7 +63,6 @@ const MyProvider = ({ children }) => {
           params: { dataSearch: dataSearch },
         }
       );
-      // console.log(JSON.parse(response.data));
       setDataMoviesSearch([true, JSON.parse(response.data)]);
     } catch {}
   };
@@ -91,6 +88,15 @@ const MyProvider = ({ children }) => {
     }
   };
 
+  const displayComment = async (typeComment, page = 1) => {
+    let data;
+    if (typeComment === "All") data = "{}";
+    else if (typeComment === "Positive") data = '{ "sentiment": "positive" }';
+    else if (typeComment === "Negative") data = '{ "sentiment": "negative" }';
+    const dataComment = await readComment(page, data);
+    return dataComment;
+  };
+
   const fillData = (datalength, data) => Array(datalength.length).fill(data);
 
   return (
@@ -102,6 +108,8 @@ const MyProvider = ({ children }) => {
         fillData,
         searchData,
         dataMoviesSearch,
+        setDataMoviesSearch,
+        displayComment,
       }}
     >
       {children}

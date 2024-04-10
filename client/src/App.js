@@ -3,7 +3,7 @@ import Movies from "./component/Movies.js";
 
 function App() {
   return (
-    <div className="">
+    <div className="bg-dark">
       <Nav />
       <Movies />
     </div>

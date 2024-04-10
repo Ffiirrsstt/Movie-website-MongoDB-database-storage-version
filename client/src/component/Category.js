@@ -60,7 +60,7 @@ const Category = (props) => {
   }, [dataShow]);
 
   return (
-    <div className={`pt-5 test ${classPB}`}>
+    <div className={`pt-5 test ${classPB} w-100`}>
       <h1 className="fs-2 category">{text}</h1>
       <div className="d-flex justify-content-between">
         {dataShow !== undefined &&

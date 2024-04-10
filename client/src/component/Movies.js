@@ -9,7 +9,8 @@ import MyContext from "../Context/MyContext";
 import "../css/MoviesCategory.css";
 
 const Movies = () => {
-  const { readData, readComment, dataMoviesSearch } = useContext(MyContext);
+  const { readData, dataMoviesSearch, displayComment, setDataMoviesSearch } =
+    useContext(MyContext);
   const numPromote = useRef(0); //useRef เก็บค่าไม่ให้หายหลังจากการ render
 
   const urlData = useMemo(
@@ -17,26 +18,25 @@ const Movies = () => {
       {
         index: 0,
         urlImg:
-          "https://th.bing.com/th/id/R.c17cd7651d43b1005384132c24cc1aa4?rik=n%2bOa1SmmXMtX0A&pid=ImgRaw&r=0",
-        titleImg: "แมว",
+          "https://static0.srcdn.com/wordpress/wp-content/uploads/2019/04/Avengers-Endgame-Poster-Cropped.jpg",
+        titleImg: "Avengers",
       },
       {
         index: 1,
         urlImg:
-          "https://th.bing.com/th/id/OIP.5FTenxt-3il9nwxzvDIYzgHaE7?rs=1&pid=ImgDetMain",
-        titleImg: "หมา",
+          "https://image.tmdb.org/t/p/w1280/wRbhBPT9uu8ZdXI6tRhc73Yq171.jpg",
+        titleImg: "Harry Potter",
       },
       {
         index: 3,
         urlImg:
-          "https://th.bing.com/th/id/R.c17cd7651d43b1005384132c24cc1aa4?rik=n%2bOa1SmmXMtX0A&pid=ImgRaw&r=0",
-        titleImg: "แมว",
+          "https://th.bing.com/th/id/R.863dba5ece0b25bbcef920493f9e402e?rik=1%2bRPZYTnRfVcpg&riu=http%3a%2f%2fyesofcorsa.com%2fwp-content%2fuploads%2f2018%2f05%2f4K-Avatar-Wallpaper-For-Desktop.jpg&ehk=DZgYan4YE9cKQORPjgezE%2fmuo%2b6TeO%2bVl6ifSVXqj60%3d&risl=&pid=ImgRaw&r=0",
+        titleImg: "Avatar",
       },
       {
         index: 4,
-        urlImg:
-          "https://th.bing.com/th/id/OIP.5FTenxt-3il9nwxzvDIYzgHaE7?rs=1&pid=ImgDetMain",
-        titleImg: "หมา",
+        urlImg: "https://i.ytimg.com/vi/Cf7O68xQHlo/maxresdefault.jpg",
+        titleImg: "Solo Leveling",
       },
     ],
     []
@@ -50,7 +50,6 @@ const Movies = () => {
   const [numBtn, setNumBtn] = useState([]);
   const [typeComment, setTypeComment] = useState("All");
   const [numPage, setNumPage] = useState(1);
-  const [test, setTest] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,34 +70,23 @@ const Movies = () => {
   }, [comment]);
 
   useEffect(() => {
-    runComment();
+    runComment(numPage);
   }, [numPage]);
 
   useEffect(() => {
     runComment(1);
   }, [typeComment]);
 
-  useEffect(() => {
-    setTest(dataMoviesSearch[1]);
-  }, [dataMoviesSearch]);
-
   const runComment = async (page) => {
-    await displayComment(page);
+    const cm = await displayComment(typeComment, page);
+    setComment(cm);
     generateNumBtn();
   };
 
-  const displayComment = async (page = numPage) => {
-    let data;
-    if (typeComment === "All") data = "{}";
-    else if (typeComment === "Positive") data = '{ "sentiment": "positive" }';
-    else if (typeComment === "Negative") data = '{ "sentiment": "negative" }';
-    const dataComment = await readComment(page, data);
-    setComment(dataComment);
-  };
-
   const readAllData = async () => {
-    readDataMovie();
-    displayComment();
+    await readDataMovie();
+    const cm = await displayComment(typeComment);
+    setComment(cm);
   };
 
   const readDataSuggested = async () => {
@@ -142,6 +130,10 @@ const Movies = () => {
       for (let num = 1; num <= cmCount / 20 + 1; num++) result.push(num);
       setNumBtn(result);
     }
+  };
+
+  const stop = () => {
+    setDataMoviesSearch([false, dataMoviesSearch[1]]);
   };
 
   const receivedTypeComment = async (data) => setTypeComment(data);
@@ -219,9 +211,15 @@ const Movies = () => {
           </>
         )}
         {dataMoviesSearch[0] && (
-          <SearchMovies dataMoives={Object.values(dataMoviesSearch[1])} />
+          <SearchMovies
+            dataMoives={Object.values(dataMoviesSearch[1])}
+            stopSearching={stop}
+          />
         )}
-        <Comment sendAllComment={(data) => setComment(data)} />
+        <Comment
+          typeComment={typeComment}
+          sendAllComment={(data) => setComment(data)}
+        />
         <AllComment comment={comment} sendTypeComment={receivedTypeComment} />
         <div className="w-100 text-end">
           {!(numBtn.length === 1) &&

@@ -5,15 +5,15 @@ import swal from "sweetalert";
 import MyContext from "../Context/MyContext";
 import "../css/CommentAllComment.css";
 
-const Comment = ({ sendAllComment }) => {
-  const { readData, readComment } = useContext(MyContext);
+const Comment = ({ sendAllComment, typeComment }) => {
+  const { readData, displayComment } = useContext(MyContext);
   const navigator = useNavigate();
   const [dataComment, setDataComment] = useState("");
 
   const writeComment = async () => {
     await addComment();
-    const dataAllComent = await readComment(1);
-    sendAllComment(dataAllComent);
+    const cm = await displayComment(typeComment, 1);
+    sendAllComment(cm);
   };
   const addComment = async () => {
     try {

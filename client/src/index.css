@@ -13,8 +13,10 @@ code {
 }
 
 :root {
-  --main-color: #ff0000;
-  --comment-color: #800000;
+  /* --main-color: #ff0000;
+  --comment-color: #800000; */
+  --main-color: #bd41ff;
+  --comment-color: #410561;
   --pale-color: rgba(255, 255, 255, 0.2);
   --bg-color: #141414;
   --txt-shadow: 0px 0px 5px rgba(3, 3, 3, 0.5);
@@ -82,6 +84,10 @@ code {
   width: 20%;
 }
 
+.vh-15 {
+  height: 15vh;
+}
+
 .h-15 {
   height: 15%;
 }
@@ -145,6 +151,10 @@ code {
 
 .pl-1 {
   padding-left: 1vw;
+}
+
+.pr-1 {
+  padding-right: 1vw;
 }
 
 .focus-outline-none {

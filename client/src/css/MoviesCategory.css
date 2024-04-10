@@ -27,7 +27,7 @@
 
 .category {
   padding-bottom: 1vh;
-  border-bottom: 2px solid #bf0000;
+  border-bottom: 2px solid var(--main-color);
 }
 
 .cover-channel {

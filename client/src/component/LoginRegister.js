@@ -22,7 +22,13 @@ const LoginRegister = (props) => {
       <div className="login-box rounded">
         <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center">
           <div className="w-80">
-            <h2>{heading}</h2>
+            <Link
+              to="/"
+              className="nav-link d-flex justify-content-center align-items-start"
+            >
+              <h1 className="fs-1 text-red text-center ">Movie</h1>
+            </Link>
+            <h2 className="fs-3">{heading}</h2>
             <div className="">
               <form onSubmit={handleSubmit}>
                 <input
@@ -43,11 +49,11 @@ const LoginRegister = (props) => {
                   <h3 className="fs-6">{textBtn}</h3>
                 </button>
               </form>
-              <button className="btn btn-pale  w-100 ">
-                <Link to={linkUrl} className="text-decoration-none">
+              <Link to={linkUrl} className="text-decoration-none">
+                <button className="btn btn-pale  w-100 ">
                   <h3 className="fs-6 text-white">{textLink}</h3>
-                </Link>
-              </button>
+                </button>
+              </Link>
             </div>
           </div>
         </div>
