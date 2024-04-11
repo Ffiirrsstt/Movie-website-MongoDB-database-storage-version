@@ -19,7 +19,7 @@ collectionUserData = database["UserData"]
 
 @apiAI.get('/sentiment')
 def sentiment(text: str):
-    return {'text': text, 'sentiment': model_predict(text, decode=True)}
+    return {'text': text, 'sentiment': model_predict(text)}
 
 @apiAI.get('/suggested')
 def suggested(username: str):

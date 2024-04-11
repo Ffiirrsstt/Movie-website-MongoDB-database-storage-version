@@ -80,7 +80,7 @@ def editComment(dataForm:commentFormEdit):
     if not resultCheck:
         abort(401, description="The username used does not match the account being operated.")
     
-    sentiment = model_predict(dataForm.textCommentEdit, decode=True)
+    sentiment = model_predict(dataForm.textCommentEdit)
     collectionCommentData.update_one(
     {"idComment": int(dataForm.idComment)},
     {"$set": {"comment": dataForm.textCommentEdit,"sentiment":sentiment

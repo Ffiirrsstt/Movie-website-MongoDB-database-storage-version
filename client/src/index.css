@@ -28,6 +28,15 @@ code {
   --trans: ease-in 0.2s;
 }
 
+.btn-danger {
+  background-color: var(--comment-color) !important;
+  border: 0px;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+}
+
 .bg-dark {
   background-color: var(--bg-color) !important;
 }
@@ -57,12 +66,20 @@ code {
   background-color: var(--comment-color);
 }
 
+.pt-1vw {
+  padding-top: 1vw;
+}
+
 .vw-10 {
   width: 10vw;
 }
 
 .vw-30 {
   width: 6vw;
+}
+
+.vw-40 {
+  width: 40vw;
 }
 .vw-70 {
   width: 70vw;
@@ -84,10 +101,21 @@ code {
   width: 20%;
 }
 
+.vh-5 {
+  height: 5vh !important;
+}
+
 .vh-15 {
   height: 15vh;
 }
 
+.vh-12 {
+  height: 12vh;
+}
+
+.h-10 {
+  height: 10%;
+}
 .h-15 {
   height: 15%;
 }
@@ -128,6 +156,14 @@ code {
 
 .mb-15p {
   margin-bottom: 15% !important;
+}
+
+.mb-1 {
+  margin-bottom: 1vh !important;
+}
+
+.mt-1 {
+  margin-top: 1vh !important;
 }
 
 .ml-1 {

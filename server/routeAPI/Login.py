@@ -34,7 +34,7 @@ async def loginAccessToken(formData: OAuth2PasswordRequestForm = Depends()):
     user =  collectionUserData.find_one({"username": formData.username})
     if not user or not pwdContext.verify(formData.password, user["password"]):
         return {"login":False}
-    accessTokenExpires = timedelta(minutes=15)
+    accessTokenExpires = timedelta(minutes=60)
     accessToken = createAccessToken(
         data={"subject": user["username"]}, expiresDelta=accessTokenExpires
     )
@@ -51,6 +51,6 @@ async def checkAccessToken (token: str = Depends(oauth2Scheme)):
         return {"username": username}
     except jwt.ExpiredSignatureError:
         abort(401, description="Token has expired")
-    except jwt.JWTError:
+    except jwt.InvalidTokenError:
         abort(401, description="Invalid token")
 
