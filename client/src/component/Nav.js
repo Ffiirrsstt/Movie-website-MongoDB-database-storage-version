@@ -40,7 +40,7 @@ const Nav = () => {
             className="nav-item input h-50 border-0 rounded focus-outline-none w-50 mr-2 p-3 text-end"
             onChange={(event) => setDataSearch(event.target.value)}
             value={dataSearch}
-            placeholder="ค้นหาหนังที่ต้องการได้ที่นี่"
+            placeholder="Search for the movie you want here."
           />
           <button
             type="button"

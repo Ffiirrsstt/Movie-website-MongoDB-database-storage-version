@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/ReviewAllReview.css";
 import { PiUserMinusDuotone } from "react-icons/pi";
 import { PiUserPlusDuotone } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
@@ -8,111 +9,110 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import axios from "axios";
 import moment from "moment";
 import MyContext from "../Context/MyContext";
-import "../css/ReviewAllReview.css";
 
-const AllComment = (props) => {
-  const { Comment, sendTypeComment, idMV, changeComment, CommentEdit } = props;
+const AllReview = (props) => {
+  const { Review, sendTypeReview } = props;
   const { readData, fillData } = useContext(MyContext);
 
-  const [allComment, setAllComment] = useState();
+  const [allReview, setAllReview] = useState();
   const [readMore, setReadMore] = useState();
-  const [openEditComment, setOpenEditComment] = useState();
-  const [textCommentEdit, setTextCommentEdit] = useState("");
-  const [typeComment, setTypeComment] = useState("All");
+  const [openEditReview, setOpenEditReview] = useState();
+  const [textReviewEdit, setTextReviewEdit] = useState("");
+  const [typeReview, setTypeReview] = useState("All");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (Comment) {
-      setAllComment(Object.values(JSON.parse(Comment))[0]);
+    if (Review) {
+      setAllReview(Object.values(JSON.parse(Review))[0]);
     }
-  }, [Comment]);
+  }, [Review]);
 
   useEffect(() => {
-    if (allComment) {
-      setReadMore(fillData(allComment, false));
-      setOpenEditComment(fillData(allComment, false));
+    if (allReview) {
+      setReadMore(fillData(allReview, false));
+      setOpenEditReview(fillData(allReview, false));
     }
-  }, [allComment]);
+  }, [allReview]);
 
   useEffect(() => {
-    sendTypeComment(typeComment);
-  }, [typeComment]);
+    sendTypeReview(typeReview);
+  }, [typeReview]);
 
-  const editComment = async (idComment, indexCommentShow, createData) => {
+  const editReview = async (idReview, indexReviewShow, createData) => {
     try {
       const login = await readData(true);
       if (!login[0]) return navigate(login[1]);
 
-      let data = [...openEditComment];
+      let data = [...openEditReview];
 
       const username = login[1].username;
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API}Comment/edit`,
+        `${process.env.REACT_APP_API}Review/edit`,
         {
           username,
-          textCommentEdit,
-          idComment,
+          textReviewEdit,
+          idReview,
           createData,
-          idMV,
         }
       );
-      setAllComment(JSON.parse(response.data));
+      setAllReview(JSON.parse(response.data));
 
-      data[indexCommentShow] = false;
-      setOpenEditComment(data);
-      CommentEdit();
+      data[indexReviewShow] = false;
+      setOpenEditReview(data);
     } catch {}
   };
 
-  const deleteComment = async (idComment, indexCommentShow, createData) => {
+  const deleteReview = async (idReview, indexReviewShow, createData) => {
     try {
       const login = await readData(true);
       if (!login[0]) return navigate(login[1]);
-      let data = [...openEditComment];
+
+      let data = [...openEditReview];
+
       const username = login[1].username;
+
       const response = await axios.delete(
-        `${process.env.REACT_APP_API}Comment/delete`,
+        `${process.env.REACT_APP_API}Review/delete`,
         {
           data: {
             username,
-            idComment,
+            idReview,
             createData,
-            idMV,
           },
         }
       );
-      setAllComment(JSON.parse(response.data));
-      data.splice(indexCommentShow, 1);
-      setOpenEditComment(data);
-      changeComment();
+      setAllReview(JSON.parse(response.data));
+
+      data.splice(indexReviewShow, 1);
+      setOpenEditReview(data);
     } catch {}
   };
 
   return (
-    <div className="d-flex w-100 flex-column mt-5 rounded position-relative text-white">
+    <div className="d-flex w-100 flex-column mt-5 rounded position-relative">
       <select
         className="form-select mb-3 text-center fs-5"
-        onChange={(event) => setTypeComment(event.target.value)}
+        onChange={(event) => setTypeReview(event.target.value)}
       >
         <option value="All">All</option>
         <option value="Positive">Positive</option>
         <option value="Negative">Negative</option>
       </select>
-      {allComment &&
-        allComment.map((dataComment, indexComment) => (
+      {allReview &&
+        allReview.map((dataReview, indexReview) => (
           <div
-            key={indexComment}
+            key={indexReview}
             className={`w-100 Review-box 
-            ${indexComment === allComment.length - 1 ? "mb-5" : ""}
+            ${indexReview === allReview.length - 1 ? "mb-5" : ""}
             `}
           >
             <div className="h-20 w-100 d-flex justify-content-between bg-red-Review rounded">
               <div className="h-100 d-flex">
-                <h3 className="fs-4 mr-1 ml-1 ">{dataComment.username}</h3>
+                <h3 className="fs-4 mr-1 ml-1 ">{dataReview.username}</h3>
                 <h4 className="d-flex align-items-center h-100">
-                  {dataComment.sentiment === "positive" ? (
+                  {dataReview.sentiment === "positive" ? (
                     <PiUserPlusDuotone className="fs-3 cursor-pointer bg-red rounded-circle " />
                   ) : (
                     <PiUserMinusDuotone className="fs-3 cursor-pointer bg-success rounded-circle" />
@@ -122,45 +122,45 @@ const AllComment = (props) => {
               <div className="h-100 mr-1 d-flex">
                 {
                   <h4 className="d-flex align-items-center fs-6 mr-1">
-                    {dataComment.edited && "previously edited"}
+                    {dataReview.edited && "previously edited"}
                   </h4>
                 }
                 <h4 className="d-flex align-items-center fs-6 mr-1">
-                  {moment(dataComment.created.$date).format("YYYY-MM-DD")}
+                  {moment(dataReview.created.$date).format("YYYY-MM-DD")}
                 </h4>
-                {openEditComment &&
-                  dataComment.edit &&
-                  !openEditComment[indexComment] && (
+                {openEditReview &&
+                  dataReview.edit &&
+                  !openEditReview[indexReview] && (
                     <div className="h-100">
                       <CiEdit
                         className="fs-4 mr-1 cursor-pointer"
                         onClick={() => {
-                          let data = [...openEditComment];
-                          data[indexComment] = true;
-                          setOpenEditComment(data);
+                          let data = [...openEditReview];
+                          data[indexReview] = true;
+                          setOpenEditReview(data);
                         }}
                       />
                       <MdDelete
                         className="fs-4 cursor-pointer"
                         onClick={() =>
-                          deleteComment(
-                            dataComment.idComment,
-                            indexComment,
-                            dataComment.created.$date
+                          deleteReview(
+                            dataReview.idReview,
+                            indexReview,
+                            dataReview.created.$date
                           )
                         }
                       />
                     </div>
                   )}
 
-                {openEditComment && openEditComment[indexComment] && (
+                {openEditReview && openEditReview[indexReview] && (
                   <div className="d-flex align-items-center ">
                     <IoArrowBackOutline
                       className="fs-4 cursor-pointer"
                       onClick={() => {
-                        let data = [...openEditComment];
-                        data[indexComment] = false;
-                        setOpenEditComment(data);
+                        let data = [...openEditReview];
+                        data[indexReview] = false;
+                        setOpenEditReview(data);
                       }}
                     />
                   </div>
@@ -170,25 +170,25 @@ const AllComment = (props) => {
             <div
               className={`h-80 w-100 
               ${
-                openEditComment && !openEditComment[indexComment]
+                openEditReview && !openEditReview[indexReview]
                   ? "d-flex align-items-center pl-1 overflow-auto justify-content-between"
                   : "bg-light rounded"
               }`}
             >
-              {openEditComment && !openEditComment[indexComment] ? (
+              {openEditReview && !openEditReview[indexReview] ? (
                 <>
-                  {readMore && !readMore[indexComment] ? (
-                    dataComment.Comment.length < 40 ? (
-                      <h4 className="fs-5">{dataComment.Comment}</h4>
+                  {readMore && !readMore[indexReview] ? (
+                    dataReview.Review.length < 40 ? (
+                      <h4 className="fs-5">{dataReview.Review}</h4>
                     ) : (
                       <div className="d-flex align-items-center  ">
                         <h4 className="fs-5 mr-1">
-                          {dataComment.Comment.substring(0, 40)}...
+                          {dataReview.Review.substring(0, 40)}...
                         </h4>
                         <h4
                           onClick={() => {
                             let data = [...readMore];
-                            data[indexComment] = true;
+                            data[indexReview] = true;
                             setReadMore(data);
                           }}
                           className="fs-5 text-muted filter-brightness cursor-pointer"
@@ -199,12 +199,12 @@ const AllComment = (props) => {
                     )
                   ) : (
                     <div className="d-flex align-items-center">
-                      <h4 className="fs-5">{dataComment.Comment}</h4>
+                      <h4 className="fs-5">{dataReview.Review}</h4>
                     </div>
                   )}
 
                   <h3 className="fs-6 mr-1 ml-1 d-flex align-items-center">
-                    {new Date(dataComment.created.$date).toLocaleTimeString()}
+                    {new Date(dataReview.created.$date).toLocaleTimeString()}
                   </h3>
                 </>
               ) : (
@@ -215,15 +215,15 @@ const AllComment = (props) => {
                     id="editData"
                     placeholder="You can express your thoughts here"
                     maxLength={60}
-                    onChange={(event) => setTextCommentEdit(event.target.value)}
+                    onChange={(event) => setTextReviewEdit(event.target.value)}
                   />
                   <button
                     className="ml-1 mr-1 btn btn-warning"
                     onClick={() =>
-                      editComment(
-                        dataComment.idComment,
-                        indexComment,
-                        dataComment.created.$date
+                      editReview(
+                        dataReview.idReview,
+                        indexReview,
+                        dataReview.created.$date
                       )
                     }
                   >
@@ -240,4 +240,4 @@ const AllComment = (props) => {
   );
 };
 
-export default AllComment;
+export default AllReview;

@@ -24,15 +24,45 @@ const Category = (props) => {
     case "Animation":
       dataLen = 24;
       break;
-    case "Live-Action":
-      dataLen = 4;
-      break;
+    // case "Live-Action":
+    //   dataLen = 4;
+    //   break;
+
     // ต้องการให้แสดงรายการที่ยอดนิยม 6 อันดับแรก หรือ แสดงรายการแนะนำ
-    case "Popular":
-      dataLen = 6;
+    // case "Popular":
+    //   dataLen = 6;
+    //   break;
+
+    case "Action":
+      dataLen = 24;
+      break;
+    // case "Drama":
+    //   dataLen = 6;
+    //   break;
+    case "Fantasy":
+      dataLen = 14;
+      break;
+    /*case "Science-Fiction ":
+          dataLen = 3;
+          break;
+    case "Comedy":
+            dataLen = 4;
+            break;
+    case "Musical":
+      dataLen = 5;
+      break;
+    case "Romance":
+        dataLen = 1;
+        break;
+    case "Documentary":
+      dataLen = 1;
+      break;
+    */
+    case "Thriller":
+      dataLen = 7;
       break;
     default:
-      dataLen = 0;
+      dataLen = 6;
   }
 
   useEffect(() => {

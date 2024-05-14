@@ -2,15 +2,19 @@ import { useState, useEffect, useRef, useMemo, useContext } from "react";
 import SearchMovies from "./SearchMovies";
 import axios from "axios";
 import Category from "./Category";
-import Comment from "./Comment";
-import AllComment from "./AllComment";
+import ReviewComment from "./ReviewComment";
+import AllReview from "./AllReview";
 import MyContext from "../Context/MyContext";
 
 import "../css/MoviesCategory.css";
 
 const Movies = () => {
-  const { readData, dataMoviesSearch, displayComment, setDataMoviesSearch } =
-    useContext(MyContext);
+  const {
+    readData,
+    dataMoviesSearch,
+    displayReviewComment,
+    setDataMoviesSearch,
+  } = useContext(MyContext);
   const numPromote = useRef(0); //useRef เก็บค่าไม่ให้หายหลังจากการ render
 
   const urlData = useMemo(
@@ -46,9 +50,9 @@ const Movies = () => {
   const [selectImgPromote, setSelectImgPromote] = useState(0);
   const [dataMovies, setDataMovies] = useState();
   const [recommendations, setRecommendations] = useState();
-  const [comment, setComment] = useState();
+  const [typeReview, setTypeReview] = useState("All");
+  const [Review, setReview] = useState();
   const [numBtn, setNumBtn] = useState([]);
-  const [typeComment, setTypeComment] = useState("All");
   const [numPage, setNumPage] = useState(1);
 
   useEffect(() => {
@@ -67,26 +71,26 @@ const Movies = () => {
 
   useEffect(() => {
     generateNumBtn();
-  }, [comment]);
+  }, [Review]);
 
   useEffect(() => {
-    runComment(numPage);
+    runReview(numPage);
   }, [numPage]);
 
   useEffect(() => {
-    runComment(1);
-  }, [typeComment]);
+    runReview(1);
+  }, [typeReview]);
 
-  const runComment = async (page) => {
-    const cm = await displayComment(typeComment, page);
-    setComment(cm);
+  const runReview = async (page) => {
+    const rv = await displayReviewComment("RV", typeReview, page);
+    setReview(rv);
     generateNumBtn();
   };
 
   const readAllData = async () => {
     await readDataMovie();
-    const cm = await displayComment(typeComment);
-    setComment(cm);
+    const rv = await displayReviewComment("RV", typeReview);
+    setReview(rv);
   };
 
   const readDataSuggested = async () => {
@@ -125,9 +129,9 @@ const Movies = () => {
 
   const generateNumBtn = () => {
     let result = [];
-    if (comment) {
-      const cmCount = JSON.parse(comment).count;
-      for (let num = 1; num <= cmCount / 20 + 1; num++) result.push(num);
+    if (Review) {
+      const rvCount = JSON.parse(Review).count;
+      for (let num = 1; num <= rvCount / 20 + 1; num++) result.push(num);
       setNumBtn(result);
     }
   };
@@ -136,7 +140,7 @@ const Movies = () => {
     setDataMoviesSearch([false, dataMoviesSearch[1]]);
   };
 
-  const receivedTypeComment = async (data) => setTypeComment(data);
+  const receivedTypeReview = async (data) => setTypeReview(data);
 
   return (
     <div className="text-dark movies-main w-100 d-flex flex-column  align-items-center bg-dark">
@@ -204,6 +208,54 @@ const Movies = () => {
                   text={"Live Action"}
                   dataMovies={dataMovies.liveAction}
                   typeData={"Live-Action"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Drama"}
+                  dataMovies={dataMovies.Drama}
+                  typeData={"Drama"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Fantasy"}
+                  dataMovies={dataMovies.Fantasy}
+                  typeData={"Fantasy"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Science Fiction"}
+                  dataMovies={dataMovies.ScienceFiction}
+                  typeData={"Science-Fiction"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Comedy"}
+                  dataMovies={dataMovies.Comedy}
+                  typeData={"Comedy"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Musical"}
+                  dataMovies={dataMovies.Musical}
+                  typeData={"Musical"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Romance"}
+                  dataMovies={dataMovies.Romance}
+                  typeData={"Romance"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Documentary"}
+                  dataMovies={dataMovies.Documentary}
+                  typeData={"Documentary"}
+                  classPB={""}
+                />
+                <Category
+                  text={"Thriller"}
+                  dataMovies={dataMovies.Thriller}
+                  typeData={"Thriller"}
                   classPB={"pb-5"}
                 />
               </>
@@ -216,11 +268,8 @@ const Movies = () => {
             stopSearching={stop}
           />
         )}
-        <Comment
-          typeComment={typeComment}
-          sendAllComment={(data) => setComment(data)}
-        />
-        <AllComment comment={comment} sendTypeComment={receivedTypeComment} />
+
+        <AllReview Review={Review} sendTypeReview={receivedTypeReview} />
         <div className="w-100 text-end">
           {!(numBtn.length === 1) &&
             numBtn.map((data, index) => (
@@ -234,6 +283,13 @@ const Movies = () => {
                 {data}
               </button>
             ))}
+        </div>
+        <div className="mb-10 w-100">
+          <ReviewComment
+            type={"RV"}
+            typeAPN={typeReview}
+            sendAllReviewComment={(data) => setReview(data)}
+          />
         </div>
       </div>
     </div>

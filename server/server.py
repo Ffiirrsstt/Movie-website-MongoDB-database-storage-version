@@ -2,12 +2,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import pymon
 
 # ใช้งาน API (ไฟล์ที่เราเขียนแยกออกไป)
 from routeAPI.Movies import apiMovies
 from routeAPI.Ai import apiAI
 from routeAPI.Register import apiRegister
 from routeAPI.Login import apiLogin
+from routeAPI.Review import apiReview
 from routeAPI.Comment import apiComment
 
 # create app
@@ -25,6 +27,7 @@ app.include_router(apiMovies)
 app.include_router(apiAI)
 app.include_router(apiRegister)
 app.include_router(apiLogin)
+app.include_router(apiReview)
 app.include_router(apiComment)
 
 # start server

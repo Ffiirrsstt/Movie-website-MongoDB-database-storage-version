@@ -67,11 +67,31 @@ const MyProvider = ({ children }) => {
     } catch {}
   };
 
-  const readComment = async (page, search) => {
+  const readReview = async (page, search) => {
     try {
       let username = await readData(false);
       username = !username[0] ? "" : username[1].username;
 
+      const response = await axios.get(
+        `${process.env.REACT_APP_API}show/Review`,
+        {
+          params: {
+            username: username,
+            pageReview: page,
+            findData: search,
+          },
+        }
+      );
+      return response.data;
+    } catch {
+      console.log("Error");
+    }
+  };
+
+  const readComment = async (page, search, idMV) => {
+    try {
+      let username = await readData(false);
+      username = !username[0] ? "" : username[1].username;
       const response = await axios.get(
         `${process.env.REACT_APP_API}show/Comment`,
         {
@@ -88,13 +108,30 @@ const MyProvider = ({ children }) => {
     }
   };
 
-  const displayComment = async (typeComment, page = 1) => {
+  const displayReviewComment = async (
+    CMorRV,
+    typeReviewComment,
+    page = 1,
+    idMV = undefined
+  ) => {
     let data;
-    if (typeComment === "All") data = "{}";
-    else if (typeComment === "Positive") data = '{ "sentiment": "positive" }';
-    else if (typeComment === "Negative") data = '{ "sentiment": "negative" }';
-    const dataComment = await readComment(page, data);
-    return dataComment;
+    if (CMorRV === "CM") {
+      if (typeReviewComment === "All") data = `{"idMV":${idMV}}`;
+      else if (typeReviewComment === "Positive")
+        data = `{ "sentiment": "positive" ,"idMV":${idMV}}`;
+      else if (typeReviewComment === "Negative")
+        data = `{ "sentiment": "negative" ,"idMV":${idMV}}`;
+      const dataComment = await readComment(page, data);
+      return dataComment;
+    } else {
+      if (typeReviewComment === "All") data = "{}";
+      else if (typeReviewComment === "Positive")
+        data = '{ "sentiment": "positive" }';
+      else if (typeReviewComment === "Negative")
+        data = '{ "sentiment": "negative" }';
+      const dataReview = await readReview(page, data);
+      return dataReview;
+    }
   };
 
   const fillData = (datalength, data) => Array(datalength.length).fill(data);
@@ -104,12 +141,12 @@ const MyProvider = ({ children }) => {
       value={{
         readData,
         clearToken,
-        readComment,
+        readReview,
         fillData,
         searchData,
         dataMoviesSearch,
         setDataMoviesSearch,
-        displayComment,
+        displayReviewComment,
       }}
     >
       {children}

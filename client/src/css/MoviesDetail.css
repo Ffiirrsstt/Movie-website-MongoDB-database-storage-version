@@ -1,8 +1,11 @@
 .box-movies-detail {
   position: relative;
   top: 8vh;
-  height: 90vh;
-  width: 80vw;
+  height: 68vh;
+}
+
+.box-episode {
+  height: 13vh;
 }
 
 .bg-briefly {
@@ -11,4 +14,19 @@
 
 .bg-wg {
   background-color: rgb(224, 228, 230);
+}
+
+.flex-warp {
+  flex-wrap: wrap;
+}
+
+.for-title-s {
+  margin-bottom: 3px;
+}
+
+@media only screen and (max-width: 600px) {
+  .for-title-s {
+    flex-direction: column;
+    margin-bottom: 35px;
+  }
 }

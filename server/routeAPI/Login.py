@@ -34,7 +34,7 @@ async def loginAccessToken(formData: OAuth2PasswordRequestForm = Depends()):
     user =  collectionUserData.find_one({"username": formData.username})
     if not user or not pwdContext.verify(formData.password, user["password"]):
         return {"login":False}
-    accessTokenExpires = timedelta(minutes=60)
+    accessTokenExpires = timedelta(hours=2)
     accessToken = createAccessToken(
         data={"subject": user["username"]}, expiresDelta=accessTokenExpires
     )

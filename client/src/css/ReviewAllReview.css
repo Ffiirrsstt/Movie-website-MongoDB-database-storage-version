@@ -1,12 +1,12 @@
-.comment-main {
+.Review-main {
   border: 1px solid var(--main-color);
   height: 30vh;
   padding-left: 1vw;
   padding-right: 1vw;
 }
 
-.comment-box {
-  box-shadow: var(--shadow-box-comment);
+.Review-box {
+  box-shadow: var(--shadow-box-Review);
   margin-bottom: 3vh;
   height: 15vh;
 }
