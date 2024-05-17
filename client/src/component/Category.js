@@ -75,10 +75,8 @@ const Category = (props) => {
         })
         .then((response) => {
           setDataShow(JSON.parse(response.data));
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
         });
+      // .catch((error) => {});
     }
   }, [pageData, typeData]);
 

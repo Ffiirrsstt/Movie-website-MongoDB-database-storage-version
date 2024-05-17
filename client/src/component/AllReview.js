@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PiUserMinusDuotone } from "react-icons/pi";
-import { PiUserPlusDuotone } from "react-icons/pi";
+import { FaRegAngry } from "react-icons/fa";
+import { FaRegSmileBeam } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
@@ -268,9 +268,9 @@ const AllReview = (props) => {
                         </h3>
                         <h4 className="d-flex h-100 align-items-center mb-0">
                           {dataReview.sentiment === "positive" ? (
-                            <PiUserPlusDuotone className="fs-3 cursor-pointer bg-red rounded-circle" />
+                            <FaRegSmileBeam className="fs-3 cursor-pointer bg-success rounded-circle" />
                           ) : (
-                            <PiUserMinusDuotone className="fs-3 cursor-pointer bg-success rounded-circle" />
+                            <FaRegAngry className="fs-3 cursor-pointer bg-danger rounded-circle" />
                           )}
                         </h4>
                       </div>

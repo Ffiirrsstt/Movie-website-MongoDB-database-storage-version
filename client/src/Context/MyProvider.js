@@ -83,9 +83,7 @@ const MyProvider = ({ children }) => {
         }
       );
       return response.data;
-    } catch {
-      console.log("Error");
-    }
+    } catch {}
   };
 
   const readComment = async (page, search) => {
@@ -103,9 +101,7 @@ const MyProvider = ({ children }) => {
         }
       );
       return response.data;
-    } catch {
-      console.log("Error");
-    }
+    } catch {}
   };
 
   const displayReviewComment = async (

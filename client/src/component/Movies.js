@@ -103,9 +103,7 @@ const Movies = () => {
       );
       setRecommendations(response.data.suggested);
       return resultData[1].username;
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
+    } catch (error) {}
   };
 
   const readDataMovie = async () => {
