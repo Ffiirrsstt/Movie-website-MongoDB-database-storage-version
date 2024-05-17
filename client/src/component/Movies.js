@@ -52,8 +52,8 @@ const Movies = () => {
   const [recommendations, setRecommendations] = useState();
   const [typeReview, setTypeReview] = useState("All");
   const [Review, setReview] = useState();
-  const [numBtn, setNumBtn] = useState([]);
-  const [numPage, setNumPage] = useState(1);
+  const [pageNum, setPageNum] = useState(1);
+  const [pageReview, setPageReview] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,21 +70,16 @@ const Movies = () => {
   }, []);
 
   useEffect(() => {
-    generateNumBtn();
-  }, [Review]);
-
-  useEffect(() => {
-    runReview(numPage);
-  }, [numPage]);
-
-  useEffect(() => {
     runReview(1);
   }, [typeReview]);
+
+  useEffect(() => {
+    runReview(pageNum);
+  }, [pageNum]);
 
   const runReview = async (page) => {
     const rv = await displayReviewComment("RV", typeReview, page);
     setReview(rv);
-    generateNumBtn();
   };
 
   const readAllData = async () => {
@@ -127,20 +122,9 @@ const Movies = () => {
     setSelectImgPromote(index);
   };
 
-  const generateNumBtn = () => {
-    let result = [];
-    if (Review) {
-      const rvCount = JSON.parse(Review).count;
-      for (let num = 1; num <= rvCount / 20 + 1; num++) result.push(num);
-      setNumBtn(result);
-    }
-  };
-
   const stop = () => {
     setDataMoviesSearch([false, dataMoviesSearch[1]]);
   };
-
-  const receivedTypeReview = async (data) => setTypeReview(data);
 
   return (
     <div className="text-dark movies-main w-100 d-flex flex-column  align-items-center bg-dark">
@@ -269,26 +253,23 @@ const Movies = () => {
           />
         )}
 
-        <AllReview Review={Review} sendTypeReview={receivedTypeReview} />
-        <div className="w-100 text-end">
-          {!(numBtn.length === 1) &&
-            numBtn.map((data, index) => (
-              <button
-                key={index}
-                className={`rounded text-end mb-5 ${
-                  index === numBtn.length - 1 ? "" : "mr-1"
-                }  `}
-                onClick={() => setNumPage(data)}
-              >
-                {data}
-              </button>
-            ))}
-        </div>
+        <AllReview
+          Review={Review}
+          pageReset={pageReview}
+          sendTypeReview={(data) => setTypeReview(data)}
+          sendPageNum={(data) => setPageNum(data)}
+          sendPageReset={(data) => setPageReview(false)}
+        />
+        <div className="w-100 text-end"></div>
         <div className="mb-10 w-100">
           <ReviewComment
             type={"RV"}
             typeAPN={typeReview}
-            sendAllReviewComment={(data) => setReview(data)}
+            sendAllReviewComment={(data) => {
+              setReview(data);
+              setPageReview(true);
+              setPageNum(1);
+            }}
           />
         </div>
       </div>

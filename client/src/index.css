@@ -33,6 +33,10 @@ code {
   border: 0px;
 }
 
+.fs-6 {
+  font-size: 13px !important;
+}
+
 .btn-danger:hover {
   filter: brightness(1.1);
 }
@@ -102,6 +106,14 @@ code {
   width: 20%;
 }
 
+.w-30 {
+  width: 30%;
+}
+
+.vh-2 {
+  height: 2vh !important;
+}
+
 .vh-5 {
   height: 5vh !important;
 }
@@ -110,8 +122,8 @@ code {
   height: 15vh;
 }
 
-.vh-25 {
-  height: 20vh;
+.vh-35-55 {
+  height: 35vh;
 }
 
 .h-10 {
@@ -203,6 +215,14 @@ code {
   padding-right: 1vw;
 }
 
+.pl-1-5 {
+  padding-left: 1.5vw !important;
+}
+
+.pr-1-5 {
+  padding-right: 1.5vw !important;
+}
+
 .focus-outline-none {
   outline: none;
 }
@@ -239,4 +259,10 @@ code {
 
 .text-decoration-none {
   text-decoration: none !important;
+}
+
+@media screen and (max-width: 700px) {
+  .vh-35-55 {
+    height: 55vh;
+  }
 }

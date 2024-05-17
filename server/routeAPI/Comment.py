@@ -32,13 +32,13 @@ class CommentFormEdit(BaseModel):
     textCommentEdit:str
     idComment:int
     createData:datetime
-    idMV:int
+    findData:str
     
 class CommentFormDelete(BaseModel):
     username:str
     idComment:int
     createData:datetime
-    idMV:int
+    findData:str
 
 def checkUser(username,CommentEdit,createData):
     dataReviewComment = collectionCommentData.find_one({"created":createData})
@@ -48,8 +48,8 @@ def checkUser(username,CommentEdit,createData):
             return True
     return False
 
-def delelteUpdate(username,idMV):
-    CommentData = list(collectionCommentData.find({"idMV":idMV}).sort([("created", -1)]).skip(0).limit(20))
+def delelteUpdate(username, findData):
+    CommentData = list(collectionCommentData.find(json.loads(findData)).sort([("created", -1)]).limit(20))
     for data in CommentData:
         data["edit"] = True if data.get("username") == username else False
     
@@ -89,14 +89,14 @@ def editComment(dataForm:CommentFormEdit):
     ,"edited":True,"created":datetime.utcnow()}}
     )
 
-    return delelteUpdate(dataForm.username,dataForm.idMV)
+    return delelteUpdate(dataForm.username,dataForm.findData)
 
 @apiComment.delete('/Comment/delete')
 def deleteComment(data:CommentFormDelete):
     username = data.username
     idComment = data.idComment
     createData = data.createData
-    idMV = data.idMV
+    findData = data.findData
 
     # เช็กผู้ใช้
     resultCheck = checkUser(username,idComment,createData)
@@ -104,4 +104,4 @@ def deleteComment(data:CommentFormDelete):
         abort(401, description="The username used does not match the account being operated.")
     collectionCommentData.delete_one({"idComment": int(idComment),"created":createData})
 
-    return delelteUpdate(username,idMV)
+    return delelteUpdate(username, findData)

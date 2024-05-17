@@ -55,7 +55,7 @@ const AllComment = (props) => {
           textCommentEdit,
           idComment,
           createData,
-          idMV,
+          findData: sendReturnIdType(),
         }
       );
       setAllComment(JSON.parse(response.data));
@@ -79,7 +79,7 @@ const AllComment = (props) => {
             username,
             idComment,
             createData,
-            idMV,
+            findData: sendReturnIdType(),
           },
         }
       );
@@ -89,6 +89,11 @@ const AllComment = (props) => {
       changeComment();
     } catch {}
   };
+
+  const sendReturnIdType = () =>
+    typeComment === "All"
+      ? `{"idMV":${idMV} }`
+      : `{"sentiment": "${typeComment.toLowerCase()}", "idMV":${idMV}}`;
 
   return (
     <div className="d-flex w-100 flex-column mt-5 rounded position-relative text-white">

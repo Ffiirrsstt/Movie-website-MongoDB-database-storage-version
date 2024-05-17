@@ -23,7 +23,7 @@ database = client["WebMovie"]
 collectionReviewData = database["ReviewData"]
 
 class ReviewForm(BaseModel):
-    dataReview:str
+    dataReviewComment:str
     sentiment:str
     username:str
 
@@ -32,31 +32,34 @@ class ReviewFormEdit(BaseModel):
     textReviewEdit:str
     idReview:int
     createData:datetime
+    typeReview:str
     
 class ReviewFormDelete(BaseModel):
     username:str
     idReview:int
     createData:datetime
+    typeReview:str
 
 def checkUser(username,ReviewEdit,createData):
-    dataReview = collectionReviewData.find_one({"created":createData})
-    dataReview = collectionReviewData.find_one({"idReview": ReviewEdit,"created":createData})
-    if dataReview:
-        if dataReview.get("username") == username:
+    dataReviewComment = collectionReviewData.find_one({"created":createData})
+    dataReviewComment = collectionReviewData.find_one({"idReview": ReviewEdit,"created":createData})
+    if dataReviewComment:
+        if dataReviewComment.get("username") == username:
             return True
     return False
 
-def delelteUpdate(username):
-    ReviewData = list(collectionReviewData.find({}).sort([("created", -1)]).skip(0).limit(20))
+def delelteUpdate(username, typeReview):
+    ReviewData = list(collectionReviewData.find(json.loads(typeReview)).sort([("created", -1)]).limit(3))
     for data in ReviewData:
         data["edit"] = True if data.get("username") == username else False
     
+    print(ReviewData)
     return json_util.dumps(ReviewData)
 
 @apiReview.post('/add/Review')
 def addReview(dataForm:ReviewForm):
     ReviewId = collectionReviewData.count_documents({})
-    dataInsert  = {"idReview":ReviewId,"Review" : dataForm.dataReview
+    dataInsert  = {"idReview":ReviewId,"Review" : dataForm.dataReviewComment
     ,"sentiment":dataForm.sentiment,"username":dataForm.username
     ,"edit":False
     ,"edited":False,"created":datetime.utcnow()
@@ -66,7 +69,7 @@ def addReview(dataForm:ReviewForm):
 
 @apiReview.get('/show/Review')
 def AllReview(username:str,pageReview:int,findData:str):
-    ReviewData = list(collectionReviewData.find(json.loads(findData)).sort([("created", -1)]).skip((pageReview-1)*20).limit(pageReview*20))
+    ReviewData = list(collectionReviewData.find(json.loads(findData)).sort([("created", -1)]).skip((pageReview-1)*3).limit(3))
     for data in ReviewData:
         data["edit"] = True if data.get("username") == username else False
 
@@ -87,18 +90,18 @@ def editReview(dataForm:ReviewFormEdit):
     ,"edited":True,"created":datetime.utcnow()}}
     )
 
-    return delelteUpdate(dataForm.username)
+    return delelteUpdate(dataForm.username,dataForm.typeReview)
 
 @apiReview.delete('/Review/delete')
 def deleteReview(data:ReviewFormDelete):
     username = data.username
     idReview = data.idReview
     createData = data.createData
-
+    typeReview = data.typeReview
     # เช็กผู้ใช้
     resultCheck = checkUser(username,idReview,createData)
     if not resultCheck:
         abort(401, description="The username used does not match the account being operated.")
     collectionReviewData.delete_one({"idReview": int(idReview)})
 
-    return delelteUpdate(username)
+    return delelteUpdate(username, typeReview)

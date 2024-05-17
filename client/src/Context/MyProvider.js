@@ -88,7 +88,7 @@ const MyProvider = ({ children }) => {
     }
   };
 
-  const readComment = async (page, search, idMV) => {
+  const readComment = async (page, search) => {
     try {
       let username = await readData(false);
       username = !username[0] ? "" : username[1].username;
@@ -115,6 +115,7 @@ const MyProvider = ({ children }) => {
     idMV = undefined
   ) => {
     let data;
+    if (page === 0) page = 1;
     if (CMorRV === "CM") {
       if (typeReviewComment === "All") data = `{"idMV":${idMV}}`;
       else if (typeReviewComment === "Positive")

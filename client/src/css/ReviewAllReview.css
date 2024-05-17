@@ -15,6 +15,16 @@
   filter: brightness(1.2);
 }
 
+.position-absolute-review {
+  position: absolute;
+  bottom: 4vh;
+  right: 0px;
+}
+
+.border-pp {
+  border: 1px solid var(--main-color);
+}
+
 #editData {
   width: 100% !important;
 }
