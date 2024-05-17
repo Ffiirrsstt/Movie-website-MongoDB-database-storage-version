@@ -20,7 +20,6 @@ const AllReview = (props) => {
 
   const [allReview, setAllReview] = useState();
   const [allReviewCount, setAllReviewCount] = useState();
-  const [readMore, setReadMore] = useState();
   const [openEditReview, setOpenEditReview] = useState();
   const [textReviewEdit, setTextReviewEdit] = useState("");
   const [typeReview, setTypeReview] = useState("All");
@@ -46,7 +45,6 @@ const AllReview = (props) => {
 
   useEffect(() => {
     if (allReview) {
-      setReadMore(fillData(allReview, false));
       setOpenEditReview(fillData(allReview, false));
     }
   }, [allReview]);
@@ -104,10 +102,6 @@ const AllReview = (props) => {
       let data = [...openEditReview];
 
       const username = login[1].username;
-      const typeSend =
-        typeReview === "All"
-          ? "{}"
-          : `{ "sentiment": "${typeReview.toLowerCase()}" }`;
 
       const response = await axios.delete(
         `${process.env.REACT_APP_API}Review/delete`,
